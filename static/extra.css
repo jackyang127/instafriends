@@ -1,0 +1,14 @@
+ .jumbotron {
+    /* add bootstrap jumbotron background image */
+     background: url("http://instagramfollowers24.com/assets/cheatmp/images/background.jpg");
+     /* change bootstrap jumbotron text color */
+     color: #FFF;
+     min-height: 480px;
+     height: 100%;
+     background-size: 100% 100%;
+}
+
+#content {
+    position: relative; bottom: -140px; left: 30px;
+
+}
