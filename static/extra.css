@@ -1,6 +1,6 @@
  .jumbotron {
     /* add bootstrap jumbotron background image */
-     background: url("http://www.wallpaperfo.com/thumbnails/detail/20120716/blue%20deep%20high%20definition%20vignette%20blurred%20effect%20instagram%20gaussian%201920x1080%20wallpaper_www.wallpaperfo.com_62.jpg");
+     background: url("background.jpg");
      /* change bootstrap jumbotron text color */
      color: #FFF;
      min-height: 480px;

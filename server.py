@@ -18,7 +18,9 @@ def friends(auth_code):
 @app.route('/cover.css')
 def css():
     return app.send_static_file('cover.css')
-
+@app.route('/background.jpg')
+def background():
+    return app.send_static_file('background.jpg')
 
 @app.route('/extra.css')
 def css1():
