@@ -1,16 +1,16 @@
-
+import keys
 from instagram.client import InstagramAPI
 
+client_secret = keys.client_secrets
+
 def find_self(access_token):
-
-        client_secret = "22a6a272eeaa4b18aba7b242ade48cd3"
-
         api = InstagramAPI(access_token=access_token, client_secret=client_secret)
         self_info = api.user()
         return self_info
 
+
+
 def find_friends(access_token):
-        client_secret = "22a6a272eeaa4b18aba7b242ade48cd3"
         api = InstagramAPI(access_token=access_token, client_secret=client_secret)
 
         #sets recent_feed  media
@@ -94,9 +94,6 @@ def find_friends(access_token):
                                 score += 13 * tagged_user[user.id]
                 scores[user] = score
 
-        #print(d)
-        #print(d_ids)
-
         #gives scores for like_me index
         scores_likeme = {}
         for user in all_users:
@@ -114,8 +111,6 @@ def find_friends(access_token):
                 scores_likeme.pop(score)
 
         final_likeme_str = str(final_likeme)
-
-        #print(final_likeme, "diff")
 
         #gives scores for like_them index
         scores_likethem = {}
@@ -135,7 +130,8 @@ def find_friends(access_token):
 
         final_likethem_str = str(final_likethem)
 
-        #print(final_likethem, 'more diff')
+        #check if name is self
+        self_name = find_self(access_token)
 
         #compute final list of 5 best users with highest scores
         final = []
@@ -145,14 +141,17 @@ def find_friends(access_token):
                 v=list(scores.values())
                 k=list(scores.keys())
                 score = k[v.index(max(v))]
+                if score == self_name:  #this should get rid of when someone likes their own picture
+                    scores.pop(score)
+
                 final.append(score)
-                finalname.append(score.full_name)
-                finalscore.append(scores[score])
+                #finalname.append(score.full_name)
+                #finalscore.append(scores[score])
                 scores.pop(score)
 
 
         final_str = str(final)
-        finalname_str = str(finalname)
-        finalscore_str = str(finalscore)
+        #finalname_str = str(finalname)
+        #finalscore_str = str(finalscore)
 
         return final
