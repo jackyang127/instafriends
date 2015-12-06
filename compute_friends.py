@@ -1,4 +1,5 @@
 import keys
+import json
 from instagram.client import InstagramAPI
 
 client_secret = keys.client_secrets
@@ -177,16 +178,23 @@ def find_friends(access_token):
         autocomplete_username = []
         autocomplete_percent = []
         new_scores_to_return = {}
+        new_scores_to_return2 = {}
         max_score = max(list(scores_to_return.values()))
+        name_object = {}
         for name, score in scores_to_return.items():
             autocomplete_name.append(name.full_name)
             autocomplete_username.append(name.username)
             autocomplete_percent.append((score*100/max_score)//1)
             new_scores_to_return[name.username] = (score*100/max_score)//1
+            new_scores_to_return[name.full_name] = (score*100/max_score)//1
+            name_object[name.username] = name.profile_picture
+            name_object[name.full_name] = name.profile_picture
 
+        d = json.dumps(new_scores_to_return)
+        d2 = json.dumps(name_object)
         
 
-        return final, new_scores_to_return, autocomplete_name, autocomplete_username, autocomplete_percent
+        return final, d, autocomplete_name, autocomplete_username, d2
 
 
 

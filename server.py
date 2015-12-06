@@ -14,12 +14,12 @@ def login():
 
 @app.route('/calculate/<auth_code>', methods=['GET', 'POST'])
 def friends(auth_code):
-    friends_lists, scores, auto_name, auto_username, auto_percent = compute_friends.find_friends(auth_code)
+    friends_lists, json_percent, auto_name, auto_username, name_object = compute_friends.find_friends(auth_code)
     self_name = compute_friends.find_self(auth_code).full_name
     self_username = compute_friends.find_self(auth_code).username
     number = [1, 2, 3, 4, 5]
     friends_list = list(zip(friends_lists, number))
-    return render_template('display.html', auto_percent = auto_percent, auto_name = auto_name, auto_username = auto_username, scores = scores, friends_list = friends_list, self_name = self_name, self_username = self_username)
+    return render_template('display.html', name_object = name_object, json_percent = json_percent, auto_name = auto_name, auto_username = auto_username, friends_list = friends_list, self_name = self_name, self_username = self_username)
 @app.route('/cover.css')
 def css():
     return app.send_static_file('cover.css')

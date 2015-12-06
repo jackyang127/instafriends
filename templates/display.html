@@ -91,6 +91,22 @@
 
     </div>
 
+    <div class="jumbotron" id="search-result-display" style="visibility: hidden">
+       <div class="container">
+        <table class = "table table-hover">
+            <tr style="color:#3f729b;" >
+              <td><img id= "profile-pic-search" src="" style="width:70px;height:70px;"></td>
+              <td id="profile-name-search" style="font-size: 20px"> </td>
+              <td id="profile-percent-search" style="font-size: 20px"> </td>
+              
+            </tr>
+
+        </table>
+        </div>
+ 
+
+
+    </div>
 
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -136,9 +152,10 @@
 
 var names = "{{','.join(auto_name)}}";
 var user_name = "{{','.join(auto_username)}}";
-var percent = {{auto_percent}}
+var friends_list = {{json_percent|safe}}
 var new_user_name = user_name.split(',');
 var new_names = names.split(',');
+var name_object = {{name_object|safe}}
 
 var states = new_names.concat(new_user_name);
 
@@ -154,14 +171,21 @@ $('#the-basics .typeahead').typeahead({
 var search = "";
 //var friends_list = {{scores|safe}};
 
-//$('document').ready(function(){
-//    $('#the-basics').keypress(function(e){
-//    if(e.which == 13){  //Enter is key 13
-//        var search = $('#searchResults').val();
-//    }
-//});
+$('document').ready(function(){
+    $('#the-basics').keypress(function(e){
+    if(e.which == 13){  //Enter is key 13
+        var search = $('#searchResults').val();
+        if(friends_list.hasOwnProperty(search)){
+            console.log(friends_list[search])
+            document.getElementById("search-result-display").style.visibility = "visible";
+            document.getElementById("profile-name-search").innerHTML = search;
+            document.getElementById("profile-percent-search").innerHTML = friends_list[search] + "% of the way there!";
+            document.getElementById("profile-pic-search").src = name_object[search]
+        }
+    }
+});
 
-//});
+});
 
 
     </script>
