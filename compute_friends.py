@@ -20,6 +20,8 @@ def find_friends(access_token):
         Finding users tagged in your photos, this should be the most important factor
         """
         users = []
+        users_commented = {}
+
         num_photos_in_feed = 0
         num_photos_tagged = 0
         for media in recent_feed:
@@ -28,6 +30,20 @@ def find_friends(access_token):
                         for tagged_person in media.users_in_photo:
                                 num_photos_tagged += 1
                                 users.append(tagged_person.user)
+                """
+                ### incorporating comments ###
+                if media.comments["count"] >= 2:
+                    media_id = media.id
+                    comment_feed = api.media_comments(media_id)
+                    for comment in comment_feed:
+                        if comment.from in users_commented.keys():
+                            users_commented[comment.from] += 1
+                        else:
+                            users_commented[comment.from] = 1
+
+
+                ###
+                """
 
         tagged_user = {}
         for user in users:
@@ -36,6 +52,7 @@ def find_friends(access_token):
                 else:
                         tagged_user[user.id] = 1
 
+        
         #Done
 
 
@@ -84,16 +101,20 @@ def find_friends(access_token):
         for user in all_users:
                 score = 0
                 if user.id in d_ids:  # d_ids - dict key = user id and value is number of times they have liked a photo
-                        score += 5 *d_ids[user.id]
+                        score += 5.1 *d_ids[user.id]
                 if user.id in d:
-                        score += 2 * d[user.id]  #d - pairs users and number of times you have liked their photo
+                        score += 2.1 * d[user.id]  #d - pairs users and number of times you have liked their photo
                 if user.id in tagged_user:
                         if (num_photos_tagged < 2) or ((num_photos_tagged/num_photos_in_feed) < .2):
-                                score += 14 * tagged_user[user.id]
+                                score += 14.1 * tagged_user[user.id]
                         else:
-                                score += 13 * tagged_user[user.id]
+                                score += 13.1 * tagged_user[user.id]
+                """
+                if user.id in users_commented:
+                        score += 5 * users_commented[user.id]
+                """
                 scores[user] = score
-
+        """
         #gives scores for like_me index
         scores_likeme = {}
         for user in all_users:
@@ -129,14 +150,15 @@ def find_friends(access_token):
                 scores_likethem.pop(score)
 
         final_likethem_str = str(final_likethem)
-
+        """
         #check if name is self
         self_name = find_self(access_token)
-
+        
         #compute final list of 5 best users with highest scores
         final = []
         finalname = []
         finalscore = []
+        scores_to_return = scores.copy()
         for _ in range(5):
                 v=list(scores.values())
                 k=list(scores.keys())
@@ -151,7 +173,22 @@ def find_friends(access_token):
 
 
         final_str = str(final)
-        #finalname_str = str(finalname)
-        #finalscore_str = str(finalscore)
+        autocomplete_name = []
+        autocomplete_username = []
+        autocomplete_percent = []
+        new_scores_to_return = {}
+        max_score = max(list(scores_to_return.values()))
+        for name, score in scores_to_return.items():
+            autocomplete_name.append(name.full_name)
+            autocomplete_username.append(name.username)
+            autocomplete_percent.append((score*100/max_score)//1)
+            new_scores_to_return[name.username] = (score*100/max_score)//1
 
-        return final
+        
+
+        return final, new_scores_to_return, autocomplete_name, autocomplete_username, autocomplete_percent
+
+
+
+
+
