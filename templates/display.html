@@ -24,6 +24,16 @@
   </head>
 
   <body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=1449946215273830";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
 
     <nav class="navbar navbar-default">
       <div class="container-fluid">
@@ -88,6 +98,12 @@
                 <input id="searchResults" class="typeahead" type="text" placeholder="Search for more friends!" style="position: relative; display: inline-block; vertical-align: top;">
             </div>
         </div>
+        
+        <div align="left" style="margin-left: 30px; margin-top: 20px">
+
+            <div class="fb-like" data-href="https://www.facebook.com/Instafriend5" data-width="70" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+        </div>
+
 
     </div>
 
@@ -97,7 +113,7 @@
             <tr style="color:#3f729b;" >
               <td><img id= "profile-pic-search" src="" style="width:70px;height:70px;"></td>
               <td id="profile-name-search" style="font-size: 20px"> </td>
-              <td id="profile-percent-search" style="font-size: 20px"> </td>
+              <td id="profile-percent-search" style="font-size: 16px"> </td>
               
             </tr>
 
@@ -179,7 +195,7 @@ $('document').ready(function(){
             console.log(friends_list[search])
             document.getElementById("search-result-display").style.visibility = "visible";
             document.getElementById("profile-name-search").innerHTML = search;
-            document.getElementById("profile-percent-search").innerHTML = friends_list[search] + "% of the way there!";
+            document.getElementById("profile-percent-search").innerHTML = friends_list[search] + "th Percentile of Friends!";
             document.getElementById("profile-pic-search").src = name_object[search]
         }
     }

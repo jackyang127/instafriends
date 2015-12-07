@@ -172,31 +172,35 @@ def find_friends(access_token):
                 #finalscore.append(scores[score])
                 scores.pop(score)
 
-
         final_str = str(final)
         autocomplete_name = []
         autocomplete_username = []
-        autocomplete_percent = []
+        autocomplete_percent = []   #excuse the ghetto looking code
         new_scores_to_return = {}
         new_scores_to_return2 = {}
         max_score = max(list(scores_to_return.values()))
         name_object = {}
+
+        new_list_tuple = []
+
         for name, score in scores_to_return.items():
             autocomplete_name.append(name.full_name)
             autocomplete_username.append(name.username)
-            autocomplete_percent.append((score*100/max_score)//1)
-            new_scores_to_return[name.username] = (score*100/max_score)//1
-            new_scores_to_return[name.full_name] = (score*100/max_score)//1
-            name_object[name.username] = name.profile_picture
-            name_object[name.full_name] = name.profile_picture
+            temp = (name, score)
+            new_list_tuple.append(temp)
+
+        sorted_list_tuple = sorted(new_list_tuple, key = lambda tup: tup[1])
+
+        num_people = len(sorted_list_tuple)
+        for i, tup in enumerate(sorted_list_tuple):
+            perentile = int((i/num_people)*100)
+            new_scores_to_return[tup[0].username] = 100 - int(100*(num_people - i)/num_people) #int((i/num_people)*100) #int(((tuple_index/len(sorted_list_tuple))*100))
+            new_scores_to_return[tup[0].full_name] = 100 - int(100*(num_people - i)/num_people) #int(((i/len(sorted_list_tuple))*100))
+            name_object[tup[0].username] = tup[0].profile_picture
+            name_object[tup[0].full_name] = tup[0].profile_picture
 
         d = json.dumps(new_scores_to_return)
         d2 = json.dumps(name_object)
-        
+
 
         return final, d, autocomplete_name, autocomplete_username, d2
-
-
-
-
-
