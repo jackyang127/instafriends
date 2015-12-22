@@ -17,7 +17,6 @@
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
     <script src="/typeahead.bundle.js"></script>
 
@@ -50,12 +49,7 @@
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li><a type="button" data-toggle="modal" data-target="#myModal" style="color: #3f729b">About</a></li>
-          </ul>
           
-
-
           <p stye="color:#3f729b;"class="navbar-text navbar-right">Signed in as <a href="http://instagram.com/{{self_username}}" class="navbar-link">{{self_name}}</a></p>
         </div><!-- /.navbar-collapse -->
 
@@ -116,34 +110,17 @@
               <td id="profile-percent-search" style="font-size: 16px"> </td>
               
             </tr>
-
         </table>
+        <p id="profile-friend-title" style="color:#3f729b; font-size: 20px"> </p>
+
         </div>
  
 
 
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">About</h4>
-          </div>
-          <div class="modal-body">
-            About us
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <script>
+    
+<script>
     var substringMatcher = function(strs) {
   return function findMatches(q, cb) {
     var matches, substringRegex;
@@ -171,7 +148,10 @@ var user_name = "{{','.join(auto_username)}}";
 var friends_list = {{json_percent|safe}}
 var new_user_name = user_name.split(',');
 var new_names = names.split(',');
-var name_object = {{name_object|safe}}
+var name_object = {{name_object|safe}};
+
+var user_name_friends = {{user_name_friends|safe}};
+var full_name_friends = {{full_name_friends|safe}};
 
 var states = new_names.concat(new_user_name);
 
@@ -191,12 +171,23 @@ $('document').ready(function(){
     $('#the-basics').keypress(function(e){
     if(e.which == 13){  //Enter is key 13
         var search = $('#searchResults').val();
+
+        
         if(friends_list.hasOwnProperty(search)){
-            console.log(friends_list[search])
+            //console.log(friends_list[search])
             document.getElementById("search-result-display").style.visibility = "visible";
             document.getElementById("profile-name-search").innerHTML = search;
             document.getElementById("profile-percent-search").innerHTML = friends_list[search] + "th Percentile of Friends!";
             document.getElementById("profile-pic-search").src = name_object[search]
+            if(user_name_friends.hasOwnProperty(search)){
+                console.log(user_name_friends[search])
+                document.getElementById("profile-friend-title").innerHTML = "Their Best Friends are: 1. " + user_name_friends[search].first + " 2. " + user_name_friends[search].second + " 3. " + user_name_friends[search].third + " 4. " + user_name_friends[search].fourth + " 5. " + user_name_friends[search].fifth
+            } else if(full_name_friends.hasOwnProperty(search)){
+                console.log(full_name_friends[search])
+                document.getElementById("profile-friend-title").innerHTML = "Their Best Friends are: 1. " + full_name_friends[search].first + " 2. " + full_name_friends[search].second + " 3. " + full_name_friends[search].third + " 4. " + full_name_friends[search].fourth + " 5. " + full_name_friends[search].fifth
+            } else {
+                document.getElementById("profile-friend-title").innerHTML = "This person hasn't checked their Best Friends yet, Invite them!" 
+            }
         }
     }
 });
